@@ -1,0 +1,8 @@
+POST https://3v5e4sm5xk.execute-api.ap-northeast-1.amazonaws.com/test/
+content-type: application/json
+
+{
+    "name": "sample",
+    "email": "test",
+    "message": "test"
+}

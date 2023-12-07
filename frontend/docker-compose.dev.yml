@@ -1,0 +1,17 @@
+version: '3'
+services:
+  next:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/usr/src/app
+    tty: true
+    # command: "npm run dev"
+    ports:
+      - "3000:3000"
+    networks:
+      - fastapi_backend_web
+networks:
+  fastapi_backend_web:
+    external: true
