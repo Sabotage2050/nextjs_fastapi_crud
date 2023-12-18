@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,exc
 from starlette.middleware.cors import CORSMiddleware
 import os
 from fastapi import FastAPI, Depends, Query, status
@@ -9,16 +9,17 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import DateTime, func
+import time
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # TODO: Change this to the frontend URL
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+    # CORSMiddleware,
+    # allow_origins=["http://web:8000"],  # TODO: Change this to the frontend URL
+    # allow_credentials=True,
+    # allow_methods=["*"],
+    # allow_headers=["*"],
+# )
 
 SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{}:{}@{}:{}/{}".format(
     os.environ.get("DB_USER"),
@@ -29,6 +30,21 @@ SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{}:{}@{}:{}/{}".format(
 )
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
+
+# データベース接続の試行と再試行
+retry_times = 5
+wait_time = 5
+for _ in range(retry_times):
+    try:
+        with engine.connect() as connection:
+            pass
+    except exc.OperationalError:
+        print(f"Could not connect to the database. Waiting for {wait_time} seconds before retrying...")
+        time.sleep(wait_time)
+    else:
+        break
+else:
+    raise Exception("Could not connect to the database after several attempts")
 
 
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)

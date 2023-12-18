@@ -11,10 +11,12 @@ from pydantic import BaseModel
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import DateTime, func
 
+
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
+    # originをフロントエンドのURLに変更する
     allow_origins=["*"],  # TODO: Change this to the frontend URL
     allow_credentials=True,
     allow_methods=["*"],
