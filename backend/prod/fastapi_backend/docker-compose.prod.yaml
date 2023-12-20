@@ -10,7 +10,7 @@ services:
   nginx:
     container_name: web
     build: 
-      context: ./prod/nginx
+      context: ./nginx
       dockerfile: Dockerfile.prod
     ports:
       - "80:80"
@@ -24,12 +24,12 @@ services:
   app:
     container_name: fastapi
     build: 
-      context: ./prod/fastapi
+      context: ./fastapi_backend
       dockerfile: Dockerfile.prod
     volumes:
       - uvicorn_socket:/tmp
     env_file:
-      - ./prod/fastapi/.env.prod
+      - ./fastapi_backend/.env.prod
     networks:
       - web
     expose:
@@ -40,7 +40,7 @@ services:
     image: mysql:8.0
     container_name: db
     env_file:
-      - ./prod/db/.env.prod
+      - ./db/.env.prod
     # environment:
       # MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
       # MYSQL_ROOT_HOST: "%"
@@ -52,7 +52,7 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - data:/var/lib/mysql
-      - ./prod/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - 3306:3306
     networks:

@@ -1,0 +1,4 @@
+db/.env.prod
+fastapi_backend/.env.prod
+fastapi_ecr_push.sh
+nginx_ecr_push.sh

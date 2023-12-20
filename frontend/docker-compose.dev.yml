@@ -11,7 +11,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - fastapi_backend_web
+      - nextjs_fastapi_crud_backend_api_web
 networks:
-  fastapi_backend_web:
+  nextjs_fastapi_crud_backend_api_web:
     external: true

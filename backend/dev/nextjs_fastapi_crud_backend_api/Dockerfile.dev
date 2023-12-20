@@ -1,0 +1,27 @@
+FROM python:3.9-slim-buster
+
+# 必要なシステムパッケージをインストール
+RUN apt-get update && \
+    groupadd -g 1000 app_user && \
+    useradd -m -s /bin/bash -u 1000 -g 1000 app_user
+
+RUN mkdir -p /opt/app && chown -R app_user:app_user /opt/app
+WORKDIR /opt/app
+
+
+RUN pip install --upgrade pip
+
+RUN pip install poetry
+# 仮想環境をたてない
+RUN poetry config virtualenvs.create false
+
+# アプリケーションの依存関係をインストール
+USER app_user
+
+COPY . .
+RUN cd /opt/app
+
+RUN poetry install
+
+
+# CMD ["uvicorn", "api.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
