@@ -12,7 +12,12 @@ DB_PORT = config("DB_PORT", cast=str)
 DB_NAME = config("DB_NAME", cast=str)
 
 
-SQLALCHEMY_DATABASE_URI = config(
-    "SQLALCHEMY_DATABASE_URI",
+MYSQL_SQLALCHEMY_DATABASE_URI = config(
+    "MYSQL_SQLALCHEMY_DATABASE_URI",
     default=f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
+)
+
+AIOMYSQL_SQLALCHEMY_DATABASE_URI = config(
+    "AIOMYSQL_SQLALCHEMY_DATABASE_URI",
+    default=f"mysql+aiomysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
 )
